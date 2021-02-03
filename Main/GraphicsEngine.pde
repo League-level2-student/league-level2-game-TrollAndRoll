@@ -102,6 +102,10 @@ class Animation {
         }
         startTime = System.currentTimeMillis();//makes start time current time so that epilson is the time between frames
       }
+      run = false;//set false because run variable should only be true if it was set so using "running(true)"
+    }
+    else{//if the player isn't running...
+      frame = 0;//set the player sprite to its passive stance (frame 0)
     }
     //println(epsilon);
     //this.w = w;
@@ -115,11 +119,11 @@ class Animation {
     hz = h;
     }
     if (facingLeft) {
-      //pushMatrix();
-      //translate(images[frame].width, 0);
-      //scale(-1, 1); //mirrors image
-      image(images[frame], xpos, ypos, 0-wz, hz);//display the current frame at inputed position and width/height
-      //popMatrix();
+      pushMatrix();
+      translate(wz, 0);
+      scale(-1, 1); //mirrors image
+      image(images[frame], -xpos, ypos, wz, hz);//display the current frame at inputed position and width/height
+      popMatrix();
     } else {
       image(images[frame], xpos, ypos, wz, hz);//display the current frame at inputed position and width/height
     }
