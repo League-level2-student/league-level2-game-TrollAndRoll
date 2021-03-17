@@ -2,12 +2,13 @@ void homeScreen() {
   setupScreen(true);//see function for explination
   
   //gifs:
-  waterfallBackdrop.display(0, 0, width, height);//makes waterfall ocupy whole sketch
+  waterfallBackdrop.running(true);//makes sure that animation plays
+  waterfallBackdrop.display();//makes waterfall ocupy whole sketch
 
   //images:
-  playButton.display(290, 100, "BUTTON");
-  optionsButton.display(290, 200, "BUTTON");
-  exitButton.display(310, 300, "BUTTON");
+  playButton.display();
+  optionsButton.display();
+  exitButton.display();
 
   //reload([reload images & Animations?], [transition to stage:])
   if (playButton.clicked() == true) reload(false, 1);//begin gameScreen() when playButton is clicked
@@ -30,10 +31,10 @@ void settingsScreen() {
   textSize(28);//set txt size
 
   //images:
-  caveBackdrop1.display(0, 0, null);
-  backButton.display(10, 10, "BUTTON");
+  caveBackdrop1.display();
+  backButton.display();
   drawSettingBtns();//(see function(s) for explination)
-  infoButton.display(600, 355, "BUTTON");
+  infoButton.display();
 
   updateSoundSettings();//see function for explination
 
@@ -78,7 +79,8 @@ void drawLineChecker(int linNum, Image btn, boolean settingOn) {
 //draws a button with it's lable and functioning 'cancel' line
 void drawStgsBtn(int btnNum, String buttonLabel, Image btn, Boolean settOn) {
   text(buttonLabel, txtDistFromBtn, iniTxtY+(dist*btnNum)); //draw the label
-  btn.display(settingsBtnX, iniButY+(dist*btnNum), "BUTTON");//draw the button
+  btn.setX(settingsBtnX); btn.setY(iniButY+(dist*btnNum)); //set all the button's new x & y values
+  btn.display();//draw the button
   drawLineChecker(btnNum, btn, settOn);//draw the line (potentially) (using our drawLineChecker())
 }
 

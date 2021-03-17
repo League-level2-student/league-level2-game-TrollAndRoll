@@ -1,16 +1,20 @@
-class Image {
+public class Image {
+  String type;
   PImage image1, image2;
-  float rw, rh, rx, ry, pxz, pyz;
+  float rw, rh, rx, ry, pxz, pyz;//pxz/pyz = adjusted mouse coordinates
   boolean selected, pressed, played;
   SoundFile selectedFile = new SoundFile(Main.this, FX + "selected.wav");
   //selected.wav is only used for buttons (a kind of image) so I initialize it here
 
-  Image(String image1Name, String image2Name) {
+  Image(String image1Name, String image2Name, float rx, float ry, String type) {
     image1 = loadImage(image1Name + ".png");
     if (image2Name != null) {//only load second parameter if its not empty (otherwise program would stop :/)
       image2 = loadImage(image2Name + ".png");
     }
     //area to check for collision in is equal to that of the image dimensions.
+    this.rx = rx;
+    this.ry = ry;
+    this.type = type;
     rw = image1.width;
     rh = image1.height;
   }
@@ -20,7 +24,7 @@ class Image {
     rh = rh * percent;
   }
 
-  public void display(float rx, float ry, String type) {
+  public void display() {
     if (type == "BUTTON") {//only do button things if it is said to be a "BUTTON" (when called)
       pxz = px/(width/iniWidth);//recalobrating to account for scale()
       pyz = py/(height/iniHeight);
@@ -59,6 +63,36 @@ class Image {
   public boolean clicked() {//getter to check, elsewhere, if buttons have been clicked
     return pressed;
   }
+
+  public float x() {//returns image's x coordinate
+    return rx;
+  }
+  public float y() {//returns image's y coordinate
+    return ry;
+  }
+
+  public float w() {//returns image's x coordinate
+    return rw;
+  }
+  public float h() {//returns image's y coordinate
+    return rh;
+  }
+
+  public String getType() {//reutrns the type of image it is (i.e. "BUTTON" or otherwise)
+    return type;
+  }
+
+  public void setX(float rx) {//can be used to set image's x coordinate
+    this.rx = rx;
+  }
+
+  public void setY(float ry) {//can be used to set image's y coordinate
+    this.ry = ry;
+  }
+
+  public void setType(String type) {//can be used to set the image's 'type'
+    this.type = type;
+  }
 }
 
 // Class for animating a sequence of GIFs
@@ -67,15 +101,20 @@ class Animation {
   int imageCount, frame, framesPerSecond = 15;
   long startTime;
   float timePerFrame;
+  float xpos, ypos, w, h;//class' positioning variables
   float wz, hz;//variables for recalobrated width & height
   boolean dynamicDimensions;//will the inputed width & height change?
   boolean run = true;//should the animation play?
   boolean facingLeft;//should a sprite be mirrored on y-axis?
 
-  Animation(String imagePrefix, int count, boolean dynamicDimensions) {
+  Animation(String imagePrefix, int count, boolean dynamicDimensions, float xpos, float ypos, float w, float h) {
     this.dynamicDimensions = dynamicDimensions;
     this.startTime = System.currentTimeMillis();//returns time in millis between now & midnight
     this.timePerFrame = 1.0f / (float)framesPerSecond;//saves fps in timePerFrame float
+    this.xpos = xpos;//pass local variables into the rest of the class
+    this.ypos = ypos;
+    this.w = w;
+    this.h = h;
 
     imageCount = count;//sets the amount of images in GIF as a local variable
     images = new PImage[imageCount];//initializes 'images' array to be as big as the amount of images in the GIF
@@ -91,7 +130,7 @@ class Animation {
     this.framesPerSecond = rate;
     this.timePerFrame = 1.0f / (float)framesPerSecond;
   }
-  public void display(float xpos, float ypos, float w, float h) {
+  public void display() {
     if (run) {//if run is true, the play animation
       //checks how much time has elapsed between now and when the class was called
       float epsilon = (float)(((double)System.currentTimeMillis() - (double)startTime) / 1000.0);
@@ -103,20 +142,18 @@ class Animation {
         startTime = System.currentTimeMillis();//makes start time current time so that epilson is the time between frames
       }
       run = false;//set false because run variable should only be true if it was set so using "running(true)"
-    }
-    else{//if the player isn't running...
+    } else {//if the player isn't running...
       frame = 0;//set the player sprite to its passive stance (frame 0)
     }
     //println(epsilon);
     //this.w = w;
     //this.h = h;
-    if(dynamicDimensions){//(essentially reserved for backgrounds 'cause their dimensions are the width/height variables)
-    wz = w/(width/iniWidth);//recalobrating to account for scale()
-    hz = h/(height/iniHeight);
-    }
-    else{
-    wz = w;
-    hz = h;
+    if (dynamicDimensions) {//(essentially reserved for backgrounds 'cause their dimensions are the width/height variables)
+      wz = w/(width/iniWidth);//recalobrating to account for scale()
+      hz = h/(height/iniHeight);
+    } else {
+      wz = w;
+      hz = h;
     }
     if (facingLeft) {
       pushMatrix();
@@ -129,6 +166,30 @@ class Animation {
     }
   }
 
+  public int getFrame() {//return the frame the animation is on
+    return frame;
+  }
+
+  public float x() {//returns gif's x position
+    return xpos;
+  }
+
+  public float y() {//returns gif's y position
+    return ypos;
+  }
+  
+  public float w() {//returns gif's width
+    return wz;
+  }
+  
+  public float h() {//returns gif's width
+    return hz;
+  }
+  
+  public int getWidth() {
+    return images[0].width;//returns the actual width of the GIF (assuming all frames are the same widht as frame 1)
+  }
+
   public void running(boolean run) {
     this.run = run;//set local run equal to whatever was passed in
   }
@@ -137,15 +198,15 @@ class Animation {
     this.facingLeft = facingLeft;//set local facingLeft equal to whatever was passed in
   }
 
-  int getFrame() {//return the frame the animation is on
-    return frame;
-  }
-
-  void setFrame(int frame) {//updates the animation frame to the inputed number
+  public void setFrame(int frame) {//updates the animation frame to the inputed number
     this.frame = frame;
   }
 
-  int getWidth() {
-    return images[0].width;//returns the widht of the GIF (assuming all frames are the same widht as frame 1)
+  public void setX(float x) {//can be used to set gif's x coordinate
+    xpos = x;
+  }
+
+  public void setY(float y) {//can be used to set gif's y coordinate
+    ypos = y;
   }
 }
