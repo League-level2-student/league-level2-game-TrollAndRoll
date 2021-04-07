@@ -71,38 +71,38 @@ void handleSolidBlockCollision(Image obstacle) {
   float nx = player.x() + xSpeed;//determines will where the player x will be next frame
   float ny = player.y() + yVelocity;//determines where the player y will be next frame
 
-  if (xSpeed > 0) {//If player moving to the right then...
+  if (xSpeed > 0) {//if player moving right then...
     if (nx + player.w > obstacle.x() && //if right side of player passes left side of the obstacle
       nx < obstacle.x() && //and left side of player is to left of obstacle 
       ny + player.h > obstacle.y() && //and the bottom of the player is below the obstacle
-      ny < obstacle.y() + obstacle.h()) {//and the top of the player is ontop the obstacle's bottom
-      xSpeed = 0; //stop the plyaer from moving
-      player.setX(obstacle.x() - player.w()); //set the player to the left edge of the obstacle
+      ny < obstacle.y() + obstacle.h()) {//and the top of the player above the obstacle's bottom
+      xSpeed = 0; //stop the player
+      player.setX(obstacle.x() - player.w()); //set the player to the left side of the obstacle
     }
-  } else if (xSpeed < 0) {
-    if (nx < obstacle.x() + obstacle.w() &&
-      nx + player.w() > obstacle.x() + obstacle.w() &&
-      ny + player.h() > obstacle.y() &&
-      ny < obstacle.y() + obstacle.h()) {
-      xSpeed = 0;
-      player.setX(obstacle.x() + obstacle.w());
+  } else if (xSpeed < 0) {//if player moving left then...
+    if (nx < obstacle.x() + obstacle.w() && //if left side of player passes right side of obstacle
+      nx + player.w() > obstacle.x() + obstacle.w() && //and right side of player is to right of obstacle
+      ny + player.h() > obstacle.y() &&//and bottom of player is below top of obstacle
+      ny < obstacle.y() + obstacle.h()) {//and top of player is above the obstacle's bottom
+      xSpeed = 0;//stop player
+      player.setX(obstacle.x() + obstacle.w());//set player to the right side of the obstacle
     }
   }
-  if (yVelocity > 0) {
-    if (ny + player.h > obstacle.y() &&
-      ny < obstacle.y() &&
-      player.x() + player.w() > obstacle.x() &&
-      player.x() < obstacle.x() + obstacle.w()) {
-      yVelocity = 0;
-      player.setY(obstacle.y() - player.h());
+  if (yVelocity > 0) {//if falling
+    if (ny + player.h > obstacle.y() &&//if the bottom of the player past the top of the obstacle
+      ny < obstacle.y() &&//and the top of the player above the obstacle
+      player.x() + player.w() > obstacle.x() &&//and the right of the player is past the obstacle's left
+      player.x() < obstacle.x() + obstacle.w()) {//and the left of the player is to the left of the obstacle' right
+      yVelocity = 0;//stop player
+      player.setY(obstacle.y() - player.h());//set player's y to the base of the obstacle
     }
-  } else if (yVelocity < 0) {
-    if (ny < obstacle.y() + obstacle.h() &&
-      ny + player.h() > obstacle.y() + obstacle.h() &&
-      player.x() + player.w() > obstacle.x() &&
-      player.x() < obstacle.x() + obstacle.w()) {
-      yVelocity = 0;
-      player.setY(obstacle.y() + obstacle.h());
+  } else if (yVelocity < 0) {//if jumping
+    if (ny < obstacle.y() + obstacle.h() &&//if player's top is above obstacle's top
+      ny + player.h() > obstacle.y() + obstacle.h() &&//and player's bottom is below top
+      player.x() + player.w() > obstacle.x() &&//and player's right is to the right of obstacle's left
+      player.x() < obstacle.x() + obstacle.w()) {//and player's left is to the left of obstacle's right
+      yVelocity = 0;//stop player
+      player.setY(obstacle.y() + obstacle.h());//set player's y to top of obstacle
     }
   }
 }
