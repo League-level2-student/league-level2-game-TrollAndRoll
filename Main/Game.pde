@@ -77,7 +77,11 @@ void handleSolidBlockCollision(Image obstacle) {
       ny + player.h > obstacle.y() && //and the bottom of the player is below the obstacle
       ny < obstacle.y() + obstacle.h()) {//and the top of the player above the obstacle's bottom
       xSpeed = 0; //stop the player
-      player.setX(obstacle.x() - player.w()); //set the player to the left side of the obstacle
+      if (yVelocity > 0) {//if falling (then you'll probably land on an obstacle so...)
+        player.setY(obstacle.y() - player.h());//set player ontop of obstacle
+      } else {//if not falling
+        player.setX(obstacle.x() - player.w());//set player to left of obstacle
+      }
     }
   } else if (xSpeed < 0) {//if player moving left then...
     if (nx < obstacle.x() + obstacle.w() && //if left side of player passes right side of obstacle
@@ -85,7 +89,11 @@ void handleSolidBlockCollision(Image obstacle) {
       ny + player.h() > obstacle.y() &&//and bottom of player is below top of obstacle
       ny < obstacle.y() + obstacle.h()) {//and top of player is above the obstacle's bottom
       xSpeed = 0;//stop player
-      player.setX(obstacle.x() + obstacle.w());//set player to the right side of the obstacle
+      if (yVelocity > 0) {//if falling (then you'll probably land on an obstacle so...)
+        player.setY(obstacle.y() - player.h());//set player ontop of obstacle
+      } else {//if not falling
+        player.setX(obstacle.x() + obstacle.w());//set player to right of obstacle
+      }
     }
   }
   if (yVelocity > 0) {//if falling
