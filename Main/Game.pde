@@ -68,16 +68,16 @@ void jump() {
 //Rectangle-Rectangle Collision Detection
 void handleSolidBlockCollision(Image obstacle) {
 
-  float nx = player.x() + xSpeed;
-  float ny = player.y() + yVelocity;
+  float nx = player.x() + xSpeed;//determines will where the player x will be next frame
+  float ny = player.y() + yVelocity;//determines where the player y will be next frame
 
-  if (xSpeed > 0) {
-    if (nx + player.w > obstacle.x() && //if right side of player touches/passes left side of the obstacle
-      nx < obstacle.x() && //and left side of player is not past the right side of the obstacle 
-      ny + player.h > obstacle.y() && //and the bottom of the player is above the obstacle
-      ny < obstacle.y() + obstacle.h()) {//and the top of the player is below the obstacle
-      xSpeed = 0;
-      player.setX(obstacle.x() - player.w());
+  if (xSpeed > 0) {//If player moving to the right then...
+    if (nx + player.w > obstacle.x() && //if right side of player passes left side of the obstacle
+      nx < obstacle.x() && //and left side of player is to left of obstacle 
+      ny + player.h > obstacle.y() && //and the bottom of the player is below the obstacle
+      ny < obstacle.y() + obstacle.h()) {//and the top of the player is ontop the obstacle's bottom
+      xSpeed = 0; //stop the plyaer from moving
+      player.setX(obstacle.x() - player.w()); //set the player to the left edge of the obstacle
     }
   } else if (xSpeed < 0) {
     if (nx < obstacle.x() + obstacle.w() &&
