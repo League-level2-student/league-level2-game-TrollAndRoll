@@ -126,6 +126,19 @@ class Animation {
     }
   }
 
+  Animation(Animation animation){
+    this.dynamicDimensions = animation.dynamicDimensions;
+    this.startTime = System.currentTimeMillis();//returns time in millis between now & midnight
+    this.timePerFrame = 1.0f / (float)framesPerSecond;//saves fps in timePerFrame float
+    this.xpos = animation.xpos;//pass local variables into the rest of the class
+    this.ypos = animation.ypos;
+    this.w = animation.w;
+    this.h = animation.h;
+    
+    this.imageCount = animation.imageCount;//sets the amount of images in GIF as a local variable
+    images = animation.images;
+  }
+  
   public void setFrameRate(int rate) {//method to change the frame rate of the animation
     this.framesPerSecond = rate;
     this.timePerFrame = 1.0f / (float)framesPerSecond;
@@ -188,6 +201,10 @@ class Animation {
   
   public int getWidth() {
     return images[0].width;//returns the actual width of the GIF (assuming all frames are the same widht as frame 1)
+  }
+  
+  public boolean isRunning() {
+    return run;
   }
 
   public void running(boolean run) {

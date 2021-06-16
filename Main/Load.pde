@@ -3,8 +3,9 @@ final String font = "fonts" + '/';
 
 final String gameAsset = "gameAssets" + '/';
 
-final String players = gameAsset + "players" + '/';
+final String entities = gameAsset + "entities" + '/';
 final String backdrop = gameAsset + "backdrops" + '/';
+final String tiles = gameAsset + "caveTileSet" + '/';
 
 final String button = gameAsset + "UI_buttons" + '/';
 final String rectButton = button + "largeButtons" + '/';
@@ -15,10 +16,10 @@ final String FX = sound + "FX" + '/';
 final String music = sound + "music" + '/';
 
 PFont unispace;
-Animation waterfallBackdrop, player;
+Animation waterfallBackdrop, player, diamond;
 Image playButton, newGameButton, optionsButton, exitButton, backButton, //fScreenButton, windowedButton,
       gameSoundButton, GUISoundButton, ambienceSoundButton, musicButton, infoButton, 
-      randomBox,
+      platform1, platform2, platform3, platform4, platform5, spikes,
       caveBackdrop1, caveBackdrop2, caveBackdrop3, caveBackdrop4;
 SoundFile pressed1, pressed2, 
           selectedSound, waterfall, cave, waterDrip, waterFlow,
@@ -31,8 +32,11 @@ void loadImages() {
   caveBackdrop1 = new Image(backdrop + "pixelCaveBackdrop1", null, 0, 0, null);
   caveBackdrop1.rescale(0.62);
   caveBackdrop2 = new Image(backdrop + "pixelCaveBackdrop2", null, 0, 0, null);
+  caveBackdrop2.rescale(0.62);
   caveBackdrop3 = new Image(backdrop + "pixelCaveBackdrop3", null, 0, 0, null);
+  caveBackdrop3.rescale(0.60);
   caveBackdrop4 = new Image(backdrop + "pixelCaveBackdrop4", null, 0, 0, null);
+  caveBackdrop4.rescale(0.62);
   
   //buttons || ('rescale' is changing size by percentage)
   playButton = new Image(rectButton + "playButton", rectButton + "playColButton", 290, 100, "BUTTON");
@@ -61,14 +65,31 @@ void loadImages() {
   infoButton.rescale(0.20);
   
   //game objects
-  randomBox = new Image(squButton + "audioSquareButton", null, sqrX, floor, null);
-  randomBox.rescale(0.20);
+  platform1 = new Image(tiles + "caveTile1", null, 0, 0, null);
+  platform1.rescale(0.20);
+  
+  platform2 = new Image(tiles + "caveTile2", null, 0, 0, null);
+  platform2.rescale(0.20);
+  
+  platform3 = new Image(tiles + "caveTile3", null, 0, 0, null);
+  platform3.rescale(0.90);
+  
+  platform4 = new Image(tiles + "caveTile4", null, 0, 0, null);
+  platform4.rescale(1.20);
+  
+  platform5 = new Image(tiles + "caveTile5", null, 0, 0, null);
+  platform5.rescale(1.20);
+  
+  spikes = new Image(tiles + "spikesTile", null, 0, 0, null);
+  spikes.rescale(0.65);
 }
 
 void loadAnimations() {
   waterfallBackdrop = new Animation(backdrop+"waterfallGif"+'/'+"waterfall_", 4, true, 0, 0, width, height);
-  player = new Animation(players+"coatPlayer"+'/'+"coatPlayer_", 4, false, 10, floor, (int)playerWidth, (int)playerHeight);
-  player.running(false);
+  
+  player = new Animation(entities+"coatPlayer"+'/'+"coatPlayer_", 4, false, 135, 250, (int)playerWidth, (int)playerHeight);
+  
+  diamond = new Animation(entities+"diamond"+'/'+"diamond_", 60, false, 550, 260, 23, 23);
 }
 
 void loadSounds() {
